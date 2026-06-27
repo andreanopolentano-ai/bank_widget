@@ -1,50 +1,29 @@
-"""Модуль с функциями для вычисления площади круга и форматирования описания."""
-
-import math
+from typing import Any
 
 
-def circle_area(radius: float) -> float:
-    """
-    Вычисляет площадь круга по радиусу.
+def filter_by_state(
+    operations: list[dict[str, Any]],
+    state: str = "EXECUTED",
+) -> list[dict[str, Any]]:
+    """Возвращает список операций с указанным статусом."""
+    filtered_operations = []
 
-    Args:
-        radius: Радиус круга.
+    for operation in operations:
+        if operation.get("state") == state:
+            filtered_operations.append(operation)
 
-    Returns:
-        Площадь круга.
-
-    Example:
-        >>> circle_area(5.0)
-        78.53981633974483
-    """
-    return math.pi * radius * radius
+    return filtered_operations
 
 
-def format_description(radius: float, area: float) -> str:
-    """
-    Форматирует строку с информацией о радиусе и площади.
+def sort_by_date(
+    operations: list[dict[str, Any]],
+    reverse: bool = True,
+) -> list[dict[str, Any]]:
+    """Возвращает список операций, отсортированный по дате."""
+    sorted_operations = sorted(
+        operations,
+        key=lambda operation: operation["date"],
+        reverse=reverse,
+    )
 
-    Args:
-        radius: Радиус круга.
-        area: Площадь круга.
-
-    Returns:
-        Отформатированная строка.
-
-    Example:
-        >>> format_description(5.0, 78.5398)
-        'Radius is 5.0; area is 78.54'
-    """
-    return f"Radius is {radius}; area is {round(area, 2)}"
-
-
-def get_info(radius: float) -> None:
-    """
-    Вычисляет площадь круга и выводит описание на экран.
-
-    Args:
-        radius: Радиус круга.
-    """
-    area = circle_area(radius)
-    description = format_description(radius, area)
-    print(description)
+    return sorted_operations
