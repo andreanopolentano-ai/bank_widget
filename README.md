@@ -93,3 +93,62 @@ poetry run pytest --cov=src
 ```
 
 Функциональный код должен быть покрыт тестами более чем на 80%.
+
+
+## Модуль `generators`
+
+Модуль `generators` содержит функции для работы с большими объемами данных транзакций через итераторы и генераторы.
+
+### `filter_by_currency`
+
+Функция принимает список транзакций и код валюты. Возвращает итератор, который по очереди выдает только транзакции с указанной валютой.
+
+Пример:
+
+```python
+from src.generators import filter_by_currency
+
+usd_transactions = filter_by_currency(transactions, "USD")
+
+for _ in range(2):
+    print(next(usd_transactions))
+```
+
+### `transaction_descriptions`
+
+Функция-генератор принимает список транзакций и по очереди возвращает описание каждой операции.
+
+Пример:
+
+```python
+from src.generators import transaction_descriptions
+
+descriptions = transaction_descriptions(transactions)
+
+for _ in range(5):
+    print(next(descriptions))
+```
+
+### `card_number_generator`
+
+Генератор принимает начальное и конечное значение диапазона и выдает номера банковских карт в формате `XXXX XXXX XXXX XXXX`.
+
+Пример:
+
+```python
+from src.generators import card_number_generator
+
+for card_number in card_number_generator(1, 5):
+    print(card_number)
+```
+
+Результат:
+
+```text
+0000 0000 0000 0001
+0000 0000 0000 0002
+0000 0000 0000 0003
+0000 0000 0000 0004
+0000 0000 0000 0005
+```
+
