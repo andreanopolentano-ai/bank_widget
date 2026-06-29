@@ -1,99 +1,173 @@
 # Bank Widget
 
-Проект содержит функции для обработки данных о банковских операциях клиента.
+Проект содержит функции для обработки банковских данных, маскировки номеров карт и счетов, фильтрации операций, генерации данных по транзакциям и логирования выполнения функций.
 
-## Реализованные функции
+## Установка
 
-### `filter_by_state`
-
-Функция принимает список словарей с банковскими операциями и значение статуса операции.
-
-По умолчанию функция возвращает операции со статусом `EXECUTED`.
-
-Пример использования:
-
-```python
-from src.processing import filter_by_state
-
-operations = [
-    {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
-    {"id": 594226727, "state": "CANCELED", "date": "2018-09-12T21:27:25.241689"},
-]
-
-print(filter_by_state(operations))
-print(filter_by_state(operations, "CANCELED"))
-```
-
-### `sort_by_date`
-
-Функция принимает список словарей с банковскими операциями и сортирует его по дате.
-
-По умолчанию сортировка выполняется по убыванию, то есть сначала идут самые новые операции.
-
-Пример использования:
-
-```python
-from src.processing import sort_by_date
-
-operations = [
-    {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
-    {"id": 939719570, "state": "EXECUTED", "date": "2018-06-30T02:08:58.425572"},
-]
-
-print(sort_by_date(operations))
-print(sort_by_date(operations, False))
-```
-
-## Установка проекта
-
-Клонируйте репозиторий:
-
-```bash
-git clone https://github.com/andreanopolentano-ai/bank_widget.git
-```
-
-Перейдите в папку проекта:
-
-```bash
-cd bank_widget
-```
-
-Установите зависимости:
+Для установки зависимостей используется Poetry.
 
 ```bash
 poetry install
 ```
 
-## Тестирование
+## Запуск тестов
 
-Для запуска тестов используйте команду:
+Для запуска всех тестов:
 
 ```bash
 poetry run pytest
 ```
 
-Для формирования HTML-отчёта покрытия тестами используйте команду:
+Для запуска тестов с отчетом покрытия:
 
 ```bash
 poetry run pytest --cov=src --cov-report=html
 ```
 
-После выполнения команды HTML-отчёт будет доступен в папке:
+HTML-отчет покрытия формируется в папке `htmlcov`.
 
-```text
-htmlcov/index.html
-```
+## Проверка кода
 
-## Проверка покрытия
-
-Для просмотра покрытия в терминале используйте команду:
+Для проверки кода линтером Flake8:
 
 ```bash
-poetry run pytest --cov=src
+poetry run flake8 src tests
 ```
 
-Функциональный код должен быть покрыт тестами более чем на 80%.
+## Модуль `masks`
 
+Модуль `masks` содержит функции для маскировки номеров банковских карт и счетов.
+
+### `get_mask_card_number`
+
+Функция принимает номер карты и возвращает его в замаскированном виде.
+
+Пример:
+
+```python
+from src.masks import get_mask_card_number
+
+print(get_mask_card_number("7000792289606361"))
+```
+
+Результат:
+
+```text
+7000 79** **** 6361
+```
+
+### `get_mask_account`
+
+Функция принимает номер счета и возвращает его в замаскированном виде.
+
+Пример:
+
+```python
+from src.masks import get_mask_account
+
+print(get_mask_account("73654108430135874305"))
+```
+
+Результат:
+
+```text
+**4305
+```
+
+## Модуль `widget`
+
+Модуль `widget` содержит функции для подготовки данных к отображению пользователю.
+
+### `mask_account_card`
+
+Функция принимает строку с типом и номером карты или счета и возвращает строку с замаскированным номером.
+
+Пример:
+
+```python
+from src.widget import mask_account_card
+
+print(mask_account_card("Visa Platinum 7000792289606361"))
+print(mask_account_card("Счет 73654108430135874305"))
+```
+
+Результат:
+
+```text
+Visa Platinum 7000 79** **** 6361
+Счет **4305
+```
+
+### `get_date`
+
+Функция принимает дату в формате ISO и возвращает дату в формате `ДД.ММ.ГГГГ`.
+
+Пример:
+
+```python
+from src.widget import get_date
+
+print(get_date("2024-03-11T02:26:18.671407"))
+```
+
+Результат:
+
+```text
+11.03.2024
+```
+
+## Модуль `processing`
+
+Модуль `processing` содержит функции для фильтрации и сортировки банковских операций.
+
+### `filter_by_state`
+
+Функция принимает список операций и возвращает только операции с указанным статусом.
+
+Пример:
+
+```python
+from src.processing import filter_by_state
+
+operations = [
+    {"id": 1, "state": "EXECUTED", "date": "2024-01-01T10:00:00"},
+    {"id": 2, "state": "CANCELED", "date": "2024-01-02T10:00:00"},
+]
+
+print(filter_by_state(operations))
+```
+
+Результат:
+
+```text
+[{'id': 1, 'state': 'EXECUTED', 'date': '2024-01-01T10:00:00'}]
+```
+
+### `sort_by_date`
+
+Функция принимает список операций и возвращает список, отсортированный по дате.
+
+Пример:
+
+```python
+from src.processing import sort_by_date
+
+operations = [
+    {"id": 1, "state": "EXECUTED", "date": "2024-01-01T10:00:00"},
+    {"id": 2, "state": "EXECUTED", "date": "2024-01-02T10:00:00"},
+]
+
+print(sort_by_date(operations))
+```
+
+Результат:
+
+```text
+[
+    {'id': 2, 'state': 'EXECUTED', 'date': '2024-01-02T10:00:00'},
+    {'id': 1, 'state': 'EXECUTED', 'date': '2024-01-01T10:00:00'}
+]
+```
 
 ## Модуль `generators`
 
@@ -110,8 +184,8 @@ from src.generators import filter_by_currency
 
 usd_transactions = filter_by_currency(transactions, "USD")
 
-for _ in range(2):
-    print(next(usd_transactions))
+for transaction in usd_transactions:
+    print(transaction)
 ```
 
 ### `transaction_descriptions`
@@ -125,8 +199,8 @@ from src.generators import transaction_descriptions
 
 descriptions = transaction_descriptions(transactions)
 
-for _ in range(5):
-    print(next(descriptions))
+for description in descriptions:
+    print(description)
 ```
 
 ### `card_number_generator`
@@ -152,3 +226,98 @@ for card_number in card_number_generator(1, 5):
 0000 0000 0000 0005
 ```
 
+## Модуль `decorators`
+
+Модуль `decorators` содержит декоратор `log`, который логирует выполнение функций.
+
+### `log`
+
+Декоратор `log` может выводить информацию о работе функции в консоль или записывать ее в файл.
+
+Если аргумент `filename` не передан, лог выводится в консоль.
+
+Пример:
+
+```python
+from src.decorators import log
+
+
+@log()
+def add_numbers(x, y):
+    return x + y
+
+
+add_numbers(1, 2)
+```
+
+Результат в консоли:
+
+```text
+add_numbers ok
+```
+
+Если передать `filename`, лог будет записан в файл.
+
+Пример:
+
+```python
+from src.decorators import log
+
+
+@log(filename="mylog.txt")
+def add_numbers(x, y):
+    return x + y
+
+
+add_numbers(1, 2)
+```
+
+Результат в файле `mylog.txt`:
+
+```text
+add_numbers ok
+```
+
+Если функция завершится ошибкой, декоратор запишет имя функции, тип ошибки и входные параметры.
+
+Пример:
+
+```python
+from src.decorators import log
+
+
+@log()
+def divide_numbers(x, y):
+    return x / y
+
+
+divide_numbers(1, 0)
+```
+
+Результат:
+
+```text
+divide_numbers error: ZeroDivisionError. Inputs: (1, 0), {}
+```
+
+## Тестирование
+
+В проекте используются тесты на `pytest`.
+
+Покрытие тестами проверяется командой:
+
+```bash
+poetry run pytest --cov=src
+```
+
+HTML-отчет покрытия создается командой:
+
+```bash
+poetry run pytest --cov=src --cov-report=html
+```
+
+Отчет находится в папке:
+
+```text
+htmlcov
+```
