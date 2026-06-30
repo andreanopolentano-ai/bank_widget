@@ -339,3 +339,16 @@ from src.utils import load_transactions_from_json
 
 transactions = load_transactions_from_json("data/operations.json")
 print(transactions)
+
+## Логирование
+
+В проекте настроено логирование для модулей `masks` и `utils`.
+
+Логи записываются в папку `logs` в корне проекта.
+
+Файлы логов:
+
+```text
+logs/masks.log
+logs/utils.log
+
