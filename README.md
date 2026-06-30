@@ -321,3 +321,21 @@ poetry run pytest --cov=src --cov-report=html
 ```text
 htmlcov
 ```
+
+## Модуль `utils`
+
+Модуль `utils` содержит функцию для чтения данных о транзакциях из JSON-файла.
+
+### `load_transactions_from_json`
+
+Функция принимает путь к JSON-файлу и возвращает список словарей с данными о финансовых транзакциях.
+
+Если файл не найден, пустой или содержит не список, функция возвращает пустой список.
+
+Пример:
+
+```python
+from src.utils import load_transactions_from_json
+
+transactions = load_transactions_from_json("data/operations.json")
+print(transactions)
