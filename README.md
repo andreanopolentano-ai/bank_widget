@@ -368,3 +368,56 @@ from src.file_handlers import read_transactions_from_csv
 transactions = read_transactions_from_csv("data/transactions.csv")
 print(transactions)
 
+## Поиск и подсчет операций
+
+В проекте добавлен модуль `search`.
+
+### `process_bank_search`
+
+Функция принимает список банковских операций и строку поиска. Возвращает список операций, у которых в поле `description` есть указанная строка.
+
+Для поиска используется библиотека `re`.
+
+Пример:
+
+```python
+from src.search import process_bank_search
+
+result = process_bank_search(transactions, "Перевод")
+print(result)
+```
+
+### `process_bank_operations`
+
+Функция принимает список банковских операций и список категорий. Возвращает словарь, где ключи — названия категорий, а значения — количество операций в каждой категории.
+
+Для подсчета используется `Counter` из библиотеки `collections`.
+
+Пример:
+
+```python
+from src.search import process_bank_operations
+
+categories = ["Перевод организации", "Открытие вклада"]
+result = process_bank_operations(transactions, categories)
+print(result)
+```
+
+## Основная программа
+
+В корне проекта добавлен модуль `main`.
+
+Функция `main` связывает функциональность проекта и позволяет пользователю:
+
+- выбрать источник данных: JSON, CSV или XLSX;
+- отфильтровать операции по статусу;
+- отсортировать операции по дате;
+- оставить только рублевые транзакции;
+- выполнить поиск по описанию операции;
+- вывести итоговый список операций в консоль.
+
+Запуск основной программы:
+
+```bash
+python main.py
+```
