@@ -421,3 +421,67 @@ print(result)
 ```bash
 python main.py
 ```
+
+## Модуль `classes`
+
+В проекте добавлены классы для описания сущностей интернет-магазина.
+
+### `Product`
+
+Класс `Product` описывает товар.
+
+Атрибуты товара:
+
+- `name` — название товара;
+- `description` — описание товара;
+- `price` — цена товара;
+- `quantity` — количество товара в наличии.
+
+Пример:
+
+```python
+from src.classes import Product
+
+product = Product(
+    name="Samsung Galaxy S23 Ultra",
+    description="256GB, Серый цвет, 200MP камера",
+    price=180000.0,
+    quantity=5,
+)
+```
+
+### `Category`
+
+Класс `Category` описывает категорию товаров.
+
+Атрибуты категории:
+
+- `name` — название категории;
+- `description` — описание категории;
+- `products` — список товаров категории.
+
+Также у класса `Category` есть атрибуты класса:
+
+- `category_count` — количество созданных категорий;
+- `product_count` — общее количество товаров в созданных категориях.
+
+Эти атрибуты обновляются автоматически при создании нового объекта категории.
+
+Пример:
+
+```python
+from src.classes import Category, Product
+
+product = Product(
+    name="Iphone 15",
+    description="512GB, Gray space",
+    price=210000.0,
+    quantity=8,
+)
+
+category = Category(
+    name="Смартфоны",
+    description="Смартфоны, как средство коммуникации",
+    products=[product],
+)
+```
