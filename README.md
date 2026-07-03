@@ -339,3 +339,32 @@ from src.utils import load_transactions_from_json
 
 transactions = load_transactions_from_json("data/operations.json")
 print(transactions)
+
+## Логирование
+
+В проекте настроено логирование для модулей `masks` и `utils`.
+
+Логи записываются в папку `logs` в корне проекта.
+
+Файлы логов:
+
+```text
+logs/masks.log
+logs/utils.log
+
+## Модуль `file_handlers`
+
+Модуль `file_handlers` содержит функции для чтения финансовых операций из CSV- и Excel-файлов.
+
+### `read_transactions_from_csv`
+
+Функция принимает путь к CSV-файлу и возвращает список словарей с транзакциями.
+
+Пример:
+
+```python
+from src.file_handlers import read_transactions_from_csv
+
+transactions = read_transactions_from_csv("data/transactions.csv")
+print(transactions)
+
