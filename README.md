@@ -368,3 +368,120 @@ from src.file_handlers import read_transactions_from_csv
 transactions = read_transactions_from_csv("data/transactions.csv")
 print(transactions)
 
+## Поиск и подсчет операций
+
+В проекте добавлен модуль `search`.
+
+### `process_bank_search`
+
+Функция принимает список банковских операций и строку поиска. Возвращает список операций, у которых в поле `description` есть указанная строка.
+
+Для поиска используется библиотека `re`.
+
+Пример:
+
+```python
+from src.search import process_bank_search
+
+result = process_bank_search(transactions, "Перевод")
+print(result)
+```
+
+### `process_bank_operations`
+
+Функция принимает список банковских операций и список категорий. Возвращает словарь, где ключи — названия категорий, а значения — количество операций в каждой категории.
+
+Для подсчета используется `Counter` из библиотеки `collections`.
+
+Пример:
+
+```python
+from src.search import process_bank_operations
+
+categories = ["Перевод организации", "Открытие вклада"]
+result = process_bank_operations(transactions, categories)
+print(result)
+```
+
+## Основная программа
+
+В корне проекта добавлен модуль `main`.
+
+Функция `main` связывает функциональность проекта и позволяет пользователю:
+
+- выбрать источник данных: JSON, CSV или XLSX;
+- отфильтровать операции по статусу;
+- отсортировать операции по дате;
+- оставить только рублевые транзакции;
+- выполнить поиск по описанию операции;
+- вывести итоговый список операций в консоль.
+
+Запуск основной программы:
+
+```bash
+python main.py
+```
+
+## Модуль `classes`
+
+В проекте добавлены классы для описания сущностей интернет-магазина.
+
+### `Product`
+
+Класс `Product` описывает товар.
+
+Атрибуты товара:
+
+- `name` — название товара;
+- `description` — описание товара;
+- `price` — цена товара;
+- `quantity` — количество товара в наличии.
+
+Пример:
+
+```python
+from src.classes import Product
+
+product = Product(
+    name="Samsung Galaxy S23 Ultra",
+    description="256GB, Серый цвет, 200MP камера",
+    price=180000.0,
+    quantity=5,
+)
+```
+
+### `Category`
+
+Класс `Category` описывает категорию товаров.
+
+Атрибуты категории:
+
+- `name` — название категории;
+- `description` — описание категории;
+- `products` — список товаров категории.
+
+Также у класса `Category` есть атрибуты класса:
+
+- `category_count` — количество созданных категорий;
+- `product_count` — общее количество товаров в созданных категориях.
+
+Эти атрибуты обновляются автоматически при создании нового объекта категории.
+
+Пример:
+
+```python
+from src.classes import Category, Product
+
+product = Product(
+    name="Iphone 15",
+    description="512GB, Gray space",
+    price=210000.0,
+    quantity=8,
+)
+
+category = Category(
+    name="Смартфоны",
+    description="Смартфоны, как средство коммуникации",
+    products=[product],
+)
+```
