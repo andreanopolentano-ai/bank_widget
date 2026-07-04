@@ -21,3 +21,4 @@ build/
 .coverage
 
 logs/*.log
+reports/*.json
